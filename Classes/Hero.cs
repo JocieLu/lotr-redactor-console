@@ -19,9 +19,12 @@ namespace lotr_redactor_console.Classes
 
         public AvailableXP[] AvailableXP { get; set; }
 
-        public Hero()
+        public Hero(Hero hero)
         {
-
+            this.TitleId = hero.TitleId;
+            this.Status = hero.Status;
+            this.LastStandDifficulty = hero.LastStandDifficulty;
+            this.Corruption = hero.Corruption;
         }
     }
 }

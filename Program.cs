@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using lotr_redactor_console.Classes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -77,6 +78,9 @@ namespace lotr_redactor_console
         {
             Dictionary<int, string> availableCharacters = AvailableCharacters();
             Dictionary<int, string> availableRoles = AvailableRoles();
+            Dictionary<int, string> availableItems = AvailableItems();
+
+            Hero firstHero = savedGame.Heroes[0];
 
             Console.WriteLine("Кого добавляем?");
 
@@ -85,7 +89,7 @@ namespace lotr_redactor_console
                 Console.WriteLine($"{item.Key}. {item.Value}");
             }
 
-            Hero newHero = new Hero();
+            Hero newHero = new Hero(firstHero);
             newHero.Id = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Какой класс?");
@@ -97,13 +101,21 @@ namespace lotr_redactor_console
             newHero.RoleId = int.Parse(Console.ReadLine());
 
             int xp = 0;
-            foreach(AvailableXP currentAvailableXP in savedGame.Heroes[0].AvailableXP)
+            foreach(AvailableXP currentAvailableXP in firstHero.AvailableXP)
             {
                 xp += currentAvailableXP.XP;
             }
-
+            
             AvailableXP availableXP = new AvailableXP(newHero.RoleId, xp);
             newHero.AvailableXP = new AvailableXP[] { availableXP };
+
+            Console.WriteLine("Какое снаряжение?");
+            foreach (var item in availableItems)
+            {
+                Console.WriteLine($"{item.Key}. {item.Value}");
+            }
+
+            newHero.HeroItemIds = Console.ReadLine().Split(',').Select(x => int.Parse(x)).ToArray();
 
             savedGame.AddHero(newHero);
         }
@@ -122,6 +134,31 @@ namespace lotr_redactor_console
             int id = int.Parse(Console.ReadLine());
 
             savedGame.RemoveHero(savedGame.Heroes[id]);
+        }
+
+        static public Dictionary<int, string> AvailableItems()
+        {
+            Dictionary<int, string> availableItems = new Dictionary<int, string>();
+
+            availableItems.Add(1, "Боевой топор 2");
+            availableItems.Add(5, "Кинжал 1");
+            availableItems.Add(13, "Длинный лук 2");
+            availableItems.Add(17, "Посох 2");
+            availableItems.Add(21, "Меч 1");
+            availableItems.Add(27, "Арфа 1");
+            availableItems.Add(30, "Знамя 1");
+            availableItems.Add(37, "Кольчуга");
+            availableItems.Add(43, "Дорожная одежда");
+            availableItems.Add(49, "Плащ");
+            availableItems.Add(101, "Секира 1");
+            availableItems.Add(105, "Рог 1");
+            availableItems.Add(109, "Щит 1");
+            availableItems.Add(113, "Праща 1");
+            availableItems.Add(117, "Молот 2");
+            availableItems.Add(121, "Трость 1");
+            availableItems.Add(125, "Нож 1");           
+
+            return availableItems;
         }
 
         static public Dictionary<int, string> AvailableCharacters()
