@@ -13,10 +13,15 @@ namespace lotr_redactor_console.Classes
         public int RoleId { get; set; }
         public int Corruption { get; set; }
 
-        List<int> HeroItemIds { get; set; }
-        List<int> UnlockedTitleIds { get; set; }
-        List<int> EquippedSkillIds { get; set; }
+        public int[] HeroItemIds { get; set; }
+        public int[] UnlockedTitleIds { get; set; }
+        public int[] EquippedSkillIds { get; set; }
 
-        List<AvailableXP> AvailableXP { get; set; }
+        public AvailableXP[] AvailableXP { get; set; }
+
+        public Hero()
+        {
+
+        }
     }
 }
