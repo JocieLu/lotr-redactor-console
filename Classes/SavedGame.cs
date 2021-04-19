@@ -8,6 +8,7 @@ namespace lotr_redactor_console.Classes
     {
         public string Path { get; set; }
         public string PartyName{ get; set; }
+        public string Description { get; set; }
 
         public List<Hero> Heroes { get; set; }
 
@@ -21,6 +22,11 @@ namespace lotr_redactor_console.Classes
         public void AddHero(Hero hero)
         {
             Heroes.Add(hero);
+        }
+
+        public void RemoveHero(Hero hero)
+        {
+            Heroes.Remove(hero);
         }
     }
 }

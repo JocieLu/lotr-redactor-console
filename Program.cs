@@ -9,11 +9,11 @@ namespace lotr_redactor_console
 {
     class Program
     {
+        static SavedGame savedGame;
+
         static void Main(string[] args)
         {
             string path;
-
-            SavedGame savedGame;
 
             Dictionary<int, SavedGame> filesNames;
 
@@ -49,10 +49,56 @@ namespace lotr_redactor_console
             Console.WriteLine("1. Добавить игрока");
             Console.WriteLine("2. Удалить игрока");
 
+            int action = int.Parse(Console.ReadLine());
+            if (action == 1) AddNewHero();
+            else RemoveHero();
+                
             Console.ReadLine();
         }
 
-        private Dictionary<int, string> availableCharacters()
+        static public void AddNewHero()
+        {
+            Dictionary<int, string> availableCharacters = AvailableCharacters();
+            Dictionary<int, string> availableRoles = AvailableRoles();
+
+            Console.WriteLine("Кого добавляем?");
+
+            foreach (var item in availableCharacters)
+            {
+                Console.WriteLine($"{item.Key}. {item.Value}");
+            }
+
+            Hero newHero = new Hero();
+            newHero.Id = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Какой класс?");
+            foreach (var item in availableRoles)
+            {
+                Console.WriteLine($"{item.Key}. {item.Value}");
+            }
+
+            newHero.RoleId = int.Parse(Console.ReadLine());
+
+            savedGame.AddHero(newHero);
+        }
+
+        static public void RemoveHero()
+        {
+            Dictionary<int, string> availableCharacters = AvailableCharacters();
+
+            Console.WriteLine("Кого удаляем?");
+
+            for(int i = 0; i < savedGame.Heroes.Count; i++)
+            {
+                Console.WriteLine($"{i}. {availableCharacters[savedGame.Heroes[i].Id]}");
+            }
+            
+            int id = int.Parse(Console.ReadLine());
+
+            savedGame.RemoveHero(savedGame.Heroes[id]);
+        }
+
+        static public Dictionary<int, string> AvailableCharacters()
         {
             Dictionary<int, string> availableCharacters = new Dictionary<int, string>();
            
@@ -68,12 +114,26 @@ namespace lotr_redactor_console
             availableCharacters.Add(10, "Дис");
             availableCharacters.Add(11, "Балин");
 
-
             return availableCharacters;
-
-
         }
 
+        static public Dictionary<int, string> AvailableRoles()
+        {
+            Dictionary<int, string> availableRoles = new Dictionary<int, string>();
 
+            availableRoles.Add(1, "Взломщик");
+            availableRoles.Add(2, "Защитник");
+            availableRoles.Add(3, "Музыкант");
+            availableRoles.Add(4, "Лидер");
+            availableRoles.Add(5, "Следопыт");
+            availableRoles.Add(6, "Охотник");
+            availableRoles.Add(7, "Травник");
+            availableRoles.Add(8, "Рудовед");
+            availableRoles.Add(9, "Кузнец");
+            availableRoles.Add(10, "Путник");
+            availableRoles.Add(11, "Смутьян");
+
+            return availableRoles;
+        }
     }
 }
