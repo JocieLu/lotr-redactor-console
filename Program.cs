@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace lotr_redactor_console
 {
@@ -10,6 +11,10 @@ namespace lotr_redactor_console
 
             Console.WriteLine("путь к файлам игры:");
             path = Console.ReadLine();
+
+            string[] files = Directory.GetFiles(path, "SavedGameA", SearchOption.AllDirectories);
+
+            Console.ReadLine();
 
 
         }
