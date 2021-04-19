@@ -8,7 +8,8 @@ namespace lotr_redactor_console.Classes
     {
         public string Path { get; set; }
         public string PartyName{ get; set; }
-        public string Description { get; set; }
+        public string DescriptionHeroes { get; set; }
+        public string Description{ get; set; }
 
         public List<Hero> Heroes { get; set; }
 

@@ -8,5 +8,11 @@ namespace lotr_redactor_console.Classes
     {
         public int RoleId { get; set; }
         public int XP { get; set; }
+
+        public AvailableXP(int roleId, int xp)
+        {
+            this.RoleId = roleId;
+            this.XP = xp;
+        }
     }
 }

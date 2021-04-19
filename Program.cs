@@ -34,8 +34,12 @@ namespace lotr_redactor_console
 
                     string PartyName = (string)o.SelectToken("PartyName");
 
-                    List<Hero> heroes = JsonConvert.DeserializeObject<List<Hero>>(o.SelectToken("HeroInfo").ToString());
+                    string json = o.SelectToken("HeroInfo").ToString();
+
+                    List<Hero> heroes = JsonConvert.DeserializeObject<List<Hero>>(json);
                     savedGame = new SavedGame(PartyName, files[i], heroes);
+                    savedGame.DescriptionHeroes = json;
+                    savedGame.Description = o.ToString();
 
                     filesNames.Add(i, savedGame);
 
@@ -52,7 +56,14 @@ namespace lotr_redactor_console
             int action = int.Parse(Console.ReadLine());
             if (action == 1) AddNewHero();
             else RemoveHero();
-                
+
+            string jsonNewHeroes = JsonConvert.SerializeObject(savedGame.Heroes);
+
+            using (StreamWriter sw = new StreamWriter(savedGame.Path, false, System.Text.Encoding.Default))
+            {
+                sw.WriteLine(savedGame.Description.Replace(savedGame.DescriptionHeroes, jsonNewHeroes, StringComparison.OrdinalIgnoreCase));
+            }
+
             Console.ReadLine();
         }
 
@@ -78,6 +89,15 @@ namespace lotr_redactor_console
             }
 
             newHero.RoleId = int.Parse(Console.ReadLine());
+
+            int xp = 0;
+            foreach(AvailableXP currentAvailableXP in savedGame.Heroes[0].AvailableXP)
+            {
+                xp += currentAvailableXP.XP;
+            }
+
+            AvailableXP availableXP = new AvailableXP(newHero.RoleId, xp);
+            newHero.AvailableXP = new AvailableXP[] { availableXP };
 
             savedGame.AddHero(newHero);
         }
