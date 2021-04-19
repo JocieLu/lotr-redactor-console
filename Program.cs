@@ -25,6 +25,8 @@ namespace lotr_redactor_console
 
             filesNames = new Dictionary<int, SavedGame>(files.Length);
 
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            
             Console.WriteLine("Список сохранений:");
 
             for (int i = 0; i < files.Length; i++)
