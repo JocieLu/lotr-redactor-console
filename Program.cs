@@ -57,11 +57,17 @@ namespace lotr_redactor_console
             if (action == 1) AddNewHero();
             else RemoveHero();
 
-            string jsonNewHeroes = JsonConvert.SerializeObject(savedGame.Heroes);
+            string jsonNewHeroes = $"{JsonConvert.SerializeObject(savedGame.Heroes)},";
 
+            int firstPoint = savedGame.Description.LastIndexOf("HeroInfo") + 10;
+            int lastPoint = savedGame.Description.LastIndexOf("ItemIds") -1;
+
+            savedGame.Description = savedGame.Description.Remove(firstPoint, lastPoint - firstPoint);
+            savedGame.Description = savedGame.Description.Insert(firstPoint, jsonNewHeroes);
+            
             using (StreamWriter sw = new StreamWriter(savedGame.Path, false, System.Text.Encoding.Default))
             {
-                sw.WriteLine(savedGame.Description.Replace(savedGame.DescriptionHeroes, jsonNewHeroes, StringComparison.OrdinalIgnoreCase));
+               sw.WriteLine(savedGame.Description);
             }
 
             Console.ReadLine();
