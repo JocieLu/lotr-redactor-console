@@ -73,6 +73,7 @@ namespace lotr_redactor_console
                sw.WriteLine(savedGame.Description);
             }
 
+            Console.WriteLine("Готово");
             Console.ReadLine();
         }
 
