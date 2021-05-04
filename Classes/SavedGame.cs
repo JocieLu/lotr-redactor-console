@@ -11,23 +11,23 @@ namespace lotr_redactor_console.Classes
         public string Path { get; set; }
         public string Description { get; set; }
 
-        public List<Hero> Heroes { get; set; }
+        public List<Hero> HeroInfo { get; set; }
 
         public SavedGame(string partyName, string path, List<Hero> heroes)
         {
             this.PartyName = partyName;
             this.Path = path;
-            this.Heroes = heroes;
+            this.HeroInfo = heroes;
         }
 
         public void AddHero(Hero hero)
         {
-            Heroes.Add(hero);
+            HeroInfo.Add(hero);
         }
 
         public void RemoveHero(Hero hero)
         {
-            Heroes.Remove(hero);
+            HeroInfo.Remove(hero);
         }
     }
 }

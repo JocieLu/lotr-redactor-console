@@ -23,31 +23,20 @@ namespace lotr_redactor_console
 
             filesNames = new Dictionary<int, SavedGame>(files.Length);
 
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            
             Console.WriteLine("Список сохранений:");
 
             for (int i = 0; i < files.Length; i++)
             {
-                using (StreamReader reader = File.OpenText(files[i]))
-                {
-                    string json = reader.ReadToEnd();
-                    JObject o = JObject.Parse(json);
+                using StreamReader reader = File.OpenText(files[i]);
+                string json = reader.ReadToEnd();
 
-                    string PartyName = (string)o.SelectToken("PartyName");
+                savedGame = JsonConvert.DeserializeObject<SavedGame>(json);
+                savedGame.Description = json;
+                savedGame.Path = files[i];
 
-                    string jsonHeroInfo = o.SelectToken("HeroInfo").ToString();
+                filesNames.Add(i, savedGame);
 
-                    List<Hero> heroes = JsonConvert.DeserializeObject<List<Hero>>(jsonHeroInfo);
-                    savedGame = new SavedGame(PartyName, files[i], heroes)
-                    {
-                        Description = json
-                    };
-
-                    filesNames.Add(i, savedGame);
-
-                    Console.WriteLine($"{i}. {PartyName}");
-                }
+                Console.WriteLine($"{i}. {savedGame.PartyName}");
             }
 
             savedGame = filesNames[int.Parse(Console.ReadLine())];
@@ -60,7 +49,7 @@ namespace lotr_redactor_console
             if (action == 1) AddNewHero();
             else RemoveHero();
 
-            string jsonNewHeroes = $"{JsonConvert.SerializeObject(savedGame.Heroes, Formatting.Indented)},";
+            string jsonNewHeroes = $"{JsonConvert.SerializeObject(savedGame.HeroInfo, Formatting.Indented)},";
 
             int firstPoint = savedGame.Description.LastIndexOf("HeroInfo") + 10;
             int lastPoint = savedGame.Description.LastIndexOf("ItemIds") -1;
@@ -83,7 +72,7 @@ namespace lotr_redactor_console
             Dictionary<int, string> availableRoles = AvailableRoles();
             Dictionary<int, string> availableItems = AvailableItems();
 
-            Hero firstHero = savedGame.Heroes[0];
+            Hero firstHero = savedGame.HeroInfo[0];
 
             Console.WriteLine("Кого добавляем?");
 
@@ -129,14 +118,14 @@ namespace lotr_redactor_console
 
             Console.WriteLine("Кого удаляем?");
 
-            for(int i = 0; i < savedGame.Heroes.Count; i++)
+            for(int i = 0; i < savedGame.HeroInfo.Count; i++)
             {
-                Console.WriteLine($"{i}. {availableCharacters[savedGame.Heroes[i].Id]}");
+                Console.WriteLine($"{i}. {availableCharacters[savedGame.HeroInfo[i].Id]}");
             }
             
             int id = int.Parse(Console.ReadLine());
 
-            savedGame.RemoveHero(savedGame.Heroes[id]);
+            savedGame.RemoveHero(savedGame.HeroInfo[id]);
         }
 
         static public Dictionary<int, string> AvailableItems()
