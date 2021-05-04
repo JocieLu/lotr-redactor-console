@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using lotr_redactor_console.Classes;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace lotr_redactor_console
 {
