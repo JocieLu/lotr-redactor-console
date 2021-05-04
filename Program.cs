@@ -39,8 +39,10 @@ namespace lotr_redactor_console
                     string jsonHeroInfo = o.SelectToken("HeroInfo").ToString();
 
                     List<Hero> heroes = JsonConvert.DeserializeObject<List<Hero>>(jsonHeroInfo);
-                    savedGame = new SavedGame(PartyName, files[i], heroes);
-                    savedGame.Description = json;
+                    savedGame = new SavedGame(PartyName, files[i], heroes)
+                    {
+                        Description = json
+                    };
 
                     filesNames.Add(i, savedGame);
 
