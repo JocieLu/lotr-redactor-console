@@ -14,12 +14,10 @@ namespace lotr_redactor_console
 
         static void Main(string[] args)
         {
-            string path;
-
             Dictionary<int, SavedGame> filesNames;
 
             Console.WriteLine("путь к файлам игры:");
-            path = Console.ReadLine();
+            string path = Console.ReadLine();
 
             string[] files = Directory.GetFiles(path, "SavedGameA", SearchOption.AllDirectories);
 
@@ -33,16 +31,16 @@ namespace lotr_redactor_console
             {
                 using (StreamReader reader = File.OpenText(files[i]))
                 {
-                    JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                    string json = reader.ReadToEnd();
+                    JObject o = JObject.Parse(json);
 
                     string PartyName = (string)o.SelectToken("PartyName");
 
-                    string json = o.SelectToken("HeroInfo").ToString();
+                    string jsonHeroInfo = o.SelectToken("HeroInfo").ToString();
 
-                    List<Hero> heroes = JsonConvert.DeserializeObject<List<Hero>>(json);
+                    List<Hero> heroes = JsonConvert.DeserializeObject<List<Hero>>(jsonHeroInfo);
                     savedGame = new SavedGame(PartyName, files[i], heroes);
-                    savedGame.DescriptionHeroes = json;
-                    savedGame.Description = o.ToString();
+                    savedGame.Description = json;
 
                     filesNames.Add(i, savedGame);
 
@@ -60,7 +58,7 @@ namespace lotr_redactor_console
             if (action == 1) AddNewHero();
             else RemoveHero();
 
-            string jsonNewHeroes = $"{JsonConvert.SerializeObject(savedGame.Heroes)},";
+            string jsonNewHeroes = $"{JsonConvert.SerializeObject(savedGame.Heroes, Formatting.Indented)},";
 
             int firstPoint = savedGame.Description.LastIndexOf("HeroInfo") + 10;
             int lastPoint = savedGame.Description.LastIndexOf("ItemIds") -1;

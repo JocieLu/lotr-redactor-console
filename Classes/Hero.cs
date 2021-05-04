@@ -30,6 +30,9 @@ namespace lotr_redactor_console.Classes
             this.Status = hero.Status;
             this.LastStandDifficulty = hero.LastStandDifficulty;
             this.Corruption = hero.Corruption;
+
+            UnlockedTitleIds = new int[0];
+            EquippedSkillIds = new int[0];
         }
     }
 }
